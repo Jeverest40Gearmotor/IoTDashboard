@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+</head>
+<script>
+    //npm i bootstrap@5.3.0-alpha3
+    const URL = "https://z6my0pr9u3.execute-api.us-west-1.amazonaws.com/prod/";
+
+    function onLoad() {
+        let token = '';
+        console.log("Loaded");
+        auth();
+    }
+
+    function textUpdate (field, text) {
+        document.getElementById(field).innerText = text;
+    }
+
+    const fetchURL = async (path, body) => {
+        const res = await fetch(URL+path, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {"Content-Type":"application/json"}
+        })
+        return await res.json();
+    }
+
+    const auth = async() => {
+        const authData = await fetchURL('auth', {username: 'username', password: 'password'});
+        if (authData.error) {
+            textUpdate('error-field', "Unable to retrieve data");
+            return;
+        }
+        token = authData.token;
+        console.log("Authenticated");
+        getInfo();
+    }
+
+    const getInfo = async () => {
+        const info = await fetchURL('info', {token});
+        if (info.error) {
+            textUpdate('error-field', "Unable to retrieve data");
+            return;
+        }
+        token = info.token;
+        textUpdate('system-name', info.info.name);
+        textUpdate('system-id', 'System ID: '+info.info.systemId);
+        getSensorData();
+        setInterval(getSensorData, 5000);
+    }
+
+    const getSensorData = async () => {
+        const data = await fetchURL('get', {token});
+        if (data.error) {
+            textUpdate('error-field', "Unable to retrieve data");
+            return;
+        }
+        token = data.token;
+        var returnData = JSON.stringify(data);
+        textUpdate("data-disp", returnData);
+    }
+
+
+    
+    /*
+    const fetchHandler = async(URl, body) => {
+        const data = await fetch(URL, {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
+            }
+        });
+        console.log(data.json);
+        return await data.json();
+    }
+    const authorization = async() => {
+        console.log("Hello!");
+        const authData = await fetchHandler("https://z6my0pr9u3.execute-api.us-west-1.amazonaws.com/prod/auth", {username:"username",password:"password"});
+        console.log(authData);
+    }
+    */
+</script>
+
+<body onload="onLoad()">
+    <div class="badge bg-secondary" id="system-name"></div>
+    <div id="system-id"></div>
+    <div id="data-disp"></div>
+    <div id="error-field"></div>
+</body>

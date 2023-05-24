@@ -22,6 +22,12 @@
         document.getElementById(field).innerText = text;
     }
 
+    function changeGroup (clicked_id) {
+        console.log(clicked_id);
+        groupType = clicked_id;
+        textUpdate('dropdownMenuButton1', document.getElementById(clicked_id).innerHTML);
+    }
+
     const fetchURL = async (path, body) => {
         const res = await fetch(URL+path, {
             method: 'POST',
@@ -100,9 +106,17 @@
               Dropdown button
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+                <div class="d-grid gap-2">             
+                    <li><button id="water" type="button" onclick="changeGroup(this.id)">Water</button></li>
+                    <li><button id="door" type="button" onclick="changeGroup(this.id)">Doors</button></li>
+                    <li><button id="window" type="button" onclick="changeGroup(this.id)">Windows</button></li>
+                    <li><button id="motion" type="button" onclick="changeGroup(this.id)">Motion</button></li>
+                    <li><button id="thermostat" type="button" onclick="changeGroup(this.id)">Thermostat</button></li>
+                    <li><button id="appliance" type="button" onclick="changeGroup(this.id)">Appliances</button></li>
+                    <li><button id="electric" type="button" onclick="changeGroup(this.id)">Electric</button></li>
+                    <li><button id="safety" type="button" onclick="changeGroup(this.id)">Safety</button></li>
+                    <li><button id="internet" type="button" onclick="changeGroup(this.id)">Internet</button></li>
+                </div>
             </ul>
         </div>
     </div>

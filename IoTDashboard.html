@@ -26,6 +26,7 @@
         console.log(clicked_id);
         groupType = clicked_id;
         textUpdate('dropdownMenuButton1', document.getElementById(clicked_id).innerHTML);
+        getSensorData();
     }
 
     const fetchURL = async (path, body) => {

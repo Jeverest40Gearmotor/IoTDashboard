@@ -22,6 +22,11 @@
         document.getElementById(field).innerText = text;
     }
 
+    const addInnerHtml = (id, html) => {
+    let el = document.getElementById(id);
+    el.innerHTML = html;
+    }
+
     function changeGroup (clicked_id) {
         console.log(clicked_id);
         groupType = clicked_id;
@@ -62,6 +67,19 @@
         setInterval(getSensorData, 5000);
     }
 
+    const makeTable = (groupData) => {
+        const html = groupData.map(s => (
+            `<div class="card">
+                <div class="row">
+                    <div class="col">${s.description}</div>
+                    <div class="col">${s.value}</div>
+                </div>
+            </div>`
+        ))
+        //console.log(html);
+        return "<div class='container'>"+html.join('')+"</div>"
+    }
+
     const getSensorData = async () => {
         const data = await fetchURL('get', {token});
         const groupData = data.sensorData.filter(s => s.groupId === groupType);
@@ -71,7 +89,11 @@
         }
         token = data.token;
         var returnData = JSON.stringify(groupData);
-        textUpdate("data-disp", returnData);
+        var table = makeTable(groupData);
+        console.log(table);
+
+        addInnerHtml("data-body", table);
+        //textUpdate("data-disp", returnData);
     }
 
 
@@ -99,7 +121,7 @@
 
 <body onload="onLoad()">
     <div class="jumbotron text-center">
-        <div class="mb-3 display-5">※CardBoard※</div>
+        <h1 class="mb-3 display-4">※CardBoard※</h1>
         <div class="my-1 py-0" id="system-name"></div>
         <div class="my-1 py-0" id="system-id"></div>
         <div class="dropdown">
@@ -122,22 +144,15 @@
         </div>
     </div>
 
-
+    <div class="container">
+        <div class="card">
+            <div class="row">
+                <div class="col">Sensor</div>
+                <div class="col">Status</div>
+            </div>
+        </div>
+    </div>
     <div id="data-body" class="container">
-
-        <div class="card">
-            <div class="row">
-                <div class="col">Floor water sensor - bathroom 3</div>
-                <div class="col">false</div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="row">
-                <div class="col">text1</div>
-                <div class="col">text2</div>
-            </div>
-        </div>
     </div>
     
     <div id="data-disp"></div>

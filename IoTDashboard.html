@@ -10,7 +10,7 @@
 <script>
     //npm i bootstrap@5.3.0-alpha3
     const URL = "https://z6my0pr9u3.execute-api.us-west-1.amazonaws.com/prod/";
-    var groupType = 'window';
+    var groupType = 'water';
 
     function onLoad() {
         let token = '';
@@ -73,7 +73,7 @@
                 <div class="row">
                     <div class="col">${s.description}</div>
                     <div class="col">
-                        <span class="badge rounded-pill ${(s.value ? `bg-danger` : `bg-success`)}"> </span>
+                        ${((s.dataType == 'boolean') ? `<span class="badge rounded-pill ${(s.value ? `bg-danger` : `bg-success`)}"> </span>` : s.value)}
                     </div>
                 </div>
             </div>`

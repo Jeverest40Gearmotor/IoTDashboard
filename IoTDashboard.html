@@ -34,6 +34,24 @@
         getSensorData();
     }
 
+    function addUnit(s){
+        if(s.dataType != "number"){
+            s.unit = ""
+        }
+        if(s.description.includes("emperature")){
+            s.unit = "°F"
+        }
+        if(s.description.includes("flow")){
+            s.unit = "gal/s"
+        }
+        if(s.description.includes("production")){
+            s.unit = "kW"
+        }
+        if(s.description.includes("consumption")){
+            s.unit = "kW"
+        }
+    }
+
     const fetchURL = async (path, body) => {
         const res = await fetch(URL+path, {
             method: 'POST',
@@ -73,13 +91,19 @@
                 <div class="row">
                     <div class="col">${s.description}</div>
                     <div class="col">
-                        ${((s.dataType == 'boolean') ? `<span class="badge rounded-pill ${(s.value ? `bg-danger` : `bg-success`)}"> </span>` : s.value)}
+                        ${((s.dataType == 'boolean') ? `<span class="badge rounded-pill ${(s.value ? `bg-danger` : `bg-success`)}"> </span>` : s.value + " " + s.unit)}
                     </div>
                 </div>
             </div>`
         ))
         //console.log(html);
         return "<div class='container'>"+html.join('')+"</div>"
+    }
+
+    const addUnitsToSensors = (groupData) => {
+        return groupData.forEach(s => (
+            addUnit(s)
+        ))
     }
 
     const getSensorData = async () => {
@@ -90,6 +114,7 @@
             return;
         }
         token = data.token;
+        addUnitsToSensors(groupData);
         var returnData = JSON.stringify(groupData);
         var table = makeTable(groupData);
         console.log(table);
@@ -126,21 +151,21 @@
         <h1 class="mb-3 display-4">※CardBoard※</h1>
         <div class="my-1 py-0" id="system-name"></div>
         <div class="my-1 py-0" id="system-id"></div>
-        <div class="dropdown">
+        <div class="dropdown text-center">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
               Sensor Category
             </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                <div class="d-grid gap-2">             
-                    <li><button id="water" type="button" onclick="changeGroup(this.id)">Water</button></li>
-                    <li><button id="door" type="button" onclick="changeGroup(this.id)">Doors</button></li>
-                    <li><button id="window" type="button" onclick="changeGroup(this.id)">Windows</button></li>
-                    <li><button id="motion" type="button" onclick="changeGroup(this.id)">Motion</button></li>
-                    <li><button id="thermostat" type="button" onclick="changeGroup(this.id)">Thermostat</button></li>
-                    <li><button id="appliance" type="button" onclick="changeGroup(this.id)">Appliances</button></li>
-                    <li><button id="electric" type="button" onclick="changeGroup(this.id)">Electric</button></li>
-                    <li><button id="safety" type="button" onclick="changeGroup(this.id)">Safety</button></li>
-                    <li><button id="internet" type="button" onclick="changeGroup(this.id)">Internet</button></li>
+            <ul class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton1">
+                <div>             
+                    <li><button id="water" type="button" class="btn btn-primary w-100" onClick="changeGroup(this.id)">Water</button></li>
+                    <li><button id="door" type="button" class="btn btn-primary w-100" onclick="changeGroup(this.id)">Doors</button></li>
+                    <li><button id="window" type="button" class="btn btn-primary w-100" onclick="changeGroup(this.id)">Windows</button></li>
+                    <li><button id="motion" type="button" class="btn btn-primary w-100" onclick="changeGroup(this.id)">Motion</button></li>
+                    <li><button id="thermostat" type="button" class="btn btn-primary w-100" onclick="changeGroup(this.id)">Thermostat</button></li>
+                    <li><button id="appliance" type="button" class="btn btn-primary w-100" onclick="changeGroup(this.id)">Appliances</button></li>
+                    <li><button id="electric" type="button" class="btn btn-primary w-100" onclick="changeGroup(this.id)">Electric</button></li>
+                    <li><button id="safety" type="button" class="btn btn-primary w-100" onclick="changeGroup(this.id)">Safety</button></li>
+                    <li><button id="internet" type="button" class="btn btn-primary w-100" onclick="changeGroup(this.id)">Internet</button></li>
                 </div>
             </ul>
         </div>

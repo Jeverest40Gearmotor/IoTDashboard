@@ -119,11 +119,13 @@
         var table = makeTable(groupData);
         console.log(table);
 
+        data.sensorData.forEach(s => {
+            if(s.fault){alert("FAULT: " + s.description)}
+        })
+        
         addInnerHtml("data-body", table);
         //textUpdate("data-disp", returnData);
     }
-
-
     
     /*
     const fetchHandler = async(URl, body) => {
